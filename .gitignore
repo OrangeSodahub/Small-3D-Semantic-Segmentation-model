@@ -1,1 +1,19 @@
 Assignment Open3D-ML.pdf
+.vscode
+
+############## COMPILED FILES ##############
+*.o
+*.so
+*.pyc
+*.pyd
+
+############## MACHINE SPECIFIC ##############
+.vscode/
+.idea/
+.eggs/
+*.egg-info/
+.DS_Store
+
+############## LOG FILES ###################
+.log
+.pdf
