@@ -15,5 +15,5 @@ Assignment Open3D-ML.pdf
 .DS_Store
 
 ############## LOG FILES ###################
-.log
-.pdf
+*.log
+*.pdf
