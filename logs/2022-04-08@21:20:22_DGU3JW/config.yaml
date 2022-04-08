@@ -1,0 +1,17 @@
+modus: TRAIN
+dataset:
+  name: data
+  num_classes: 13
+  data_path: ./dataset/raw_data/data.npy
+  downsample_prefix: sample_0.03
+model:
+  name: model
+batch_generator:
+  name: batch_generator
+  params:
+    batch_size: 1
+train:
+  epochs: 100
+  ckpt_save_interval: 10
+SparseConv:
+  in_channels: 3

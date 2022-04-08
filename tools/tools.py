@@ -1,7 +1,3 @@
-"""
-various helper functions to make life easier
-"""
-
 import time
 import subprocess
 import os
@@ -12,6 +8,7 @@ import logging
 import re
 import string
 import random
+import yaml
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -71,3 +68,33 @@ def git_version():
         git_revision = "Unknown"
 
     return git_revision
+
+def import_class(package_path, class_name):
+    """
+    dynamic import of a class from a given package
+    :param package_path: path to the package
+    :param class_name: class to be dynamically loaded
+    :return: dynamically loaded class
+    """
+    try:
+        logging.info(f"Loading {package_path}.{class_name} ...")
+        module = __import__(f"{package_path}.{class_name}", fromlist=[class_name])
+        return getattr(module, us2cw(class_name))
+    except ModuleNotFoundError as exc:
+        logging.error(f"{package_path}.{class_name} could not be found")
+        exit(1)
+
+def us2cw(x):
+    """
+    underscore to capwords notation
+    from https://www.safaribooksonline.com/library/view/python-cookbook/0596001673/ch03s16.html
+    """
+    s = us2mc(x)
+    return s[0].upper()+s[1:]
+
+def us2mc(x):
+    """
+    underscore to mixed-case notation
+    from https://www.safaribooksonline.com/library/view/python-cookbook/0596001673/ch03s16.html
+    """
+    return re.sub(r'_([a-z])', lambda m: (m.group(1).upper()), x)
