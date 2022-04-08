@@ -18,3 +18,4 @@ Assignment Open3D-ML.pdf
 *.log
 *.pdf
 *.gitignore
+logs/
