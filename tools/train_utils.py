@@ -8,6 +8,7 @@ import logging
 from termcolor import colored
 
 def checkpoint_state(model, epoch):
+    
 
 def save_checkpoint(state, filename='checkpoint'):
     filename = '{}.pth'.format(filename)

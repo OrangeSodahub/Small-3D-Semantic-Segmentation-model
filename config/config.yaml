@@ -1,25 +1,40 @@
 modus: TRAIN
 dataset:
   name: data
-  num_classes: 13
   data_path: ./dataset/raw/
   train_data_path: ./dataset/train/
   test_data_path: ./dataset/test/
-  downsample_prefix: sample_0.03
+  downsample: 0.02
+
 labels:
   label_path: /classes/label_mapping.yaml
+  num_classes: 13
+
 model:
   name: model
+  fea_dim: 3
+  out_fea_dim: 13
+  num_classes: 13
+  num_input_features: 3
+  in_channels: 3
+  filters: 8
+
 batch_generator:
   name: batch_generator
   params:
     batch_size: 1
+
 train:
   epochs: 100
   batch_size: 2
   ckpt_dir: ./models/ckpts/
   ckpt_save_interval: 10
+
 eval:
   batch_size: 2
+
+test:
+  data_path: ./dataset/raw/
+
 SparseConv:
   in_channels: 3

@@ -2,7 +2,7 @@ import argparse
 import numpy as np
 from sklearn.utils import shuffle
 from tools.tools import *
-from models.model import *
+import models
 from tools.train_utils import *
 import torch.utils.data as data
 import open3d.ml.torch as ml3d
@@ -27,11 +27,7 @@ def main(config: dict, log_dir: str):
     ckpt_dir = config['train']['ckpt_dir']
     os.makedirs(ckpt_dir, exist_ok=True)
 
-    Model = import_class('models', config['model']['name'])
-    model = Model()
-
-    ops = {'loss': model.loss
-          }
+    model = models.modelbuilder.build(config['model'])
 
     train_dataset_position = np.load(config['dataset']['train_data_path']+'data.npy')[0:3]
     train_dataset_feature = np.load(config['dataset']['train_data_path']+'data.npy')[4:7]
@@ -44,13 +40,17 @@ def main(config: dict, log_dir: str):
 
     # Train with evaluation
     logging.info("***************** Start training *****************")
+    # Device is CPU
+    pytorch_device = torch.device('cpu')
+    model.to(pytorch_device)
     with tqdm.trange(epoch_start, epochs, desc='epochs') as tbar, \
         tqdm.tqdm(total=len(train_loader), leave=False, desc='Training epoch %04d / %04d ' % (epoch, epochs)) as pbar:
         for epoch in tbar:
-            train_one_epoch(train_loader, ops, epoch)
+            train_one_epoch(train_loader, model, epoch)
 
+            # Eval one epoch
             pbar.close()
-            eval_one_epoch(test_loader)
+            eval_one_epoch(test_loader, model)
 
             # Save the checkpoints
             if epoch % ckpt_save_interval == 0:
@@ -64,30 +64,19 @@ def main(config: dict, log_dir: str):
     logging.info("***************** End training *******************")
 
 
-def train_one_epoch(train_loader, ops, epoch):
-    # Device is CPU
-    pytorch_device = torch.device('cpu')
+def train_one_epoch(train_loader, model, epoch):
 
     for step, batch in enumerate(train_loader):
-        
+        out_features = model.spconv(model.channels, model.filters)
 
 
-def eval_one_epoch(test_loader):
+def eval_one_epoch(test_loader, model):
     eval_dict = {}
     total_loss = count = 0.0
 
     # eval one epoch
     for i, data in tqdm.tqdm(enumerate(test_loader, 0), total=len(test_loader), leave=False, desc='val'):
-
-        loss, tb_dict, disp_dict = model_fn_eval(model, data)
-
-        total_loss += loss.item()
-        for k, v in tb_dict.items():
-            eval_dict[k] = eval_dict.get(k, 0) + v
-
-    # statistics this epoch
-    for k, v in eval_dict.items():
-        eval_dict[k] = eval_dict[k] / max(count, 1)
+        loss = model.loss_func(model, data)
 
 
 if __name__ == '__main__':
