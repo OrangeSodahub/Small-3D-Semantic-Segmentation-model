@@ -1,10 +1,8 @@
 # Open3D_assignment
-Open3D GSoC2022 qualification assignment: Implement a small 3D Semantic Segmentation model using Sparse Convolutions and overfit (train and eval on the same data) on the given dataset.
+Implement a small 3D Semantic Segmentation model using Sparse Convolutions and overfit (train and eval on the same data) on the given dataset.
 
 
 Environment: **ubuntu20.04**,**python3.8**
-
-(I've got too busy recently, I have many courses and homeworks to do. Additionally my district occured very serious outbreak of COVID-19 so I have little time to do this assignment. I have never implemented train and test algorithms handly before. This work seems not be great I think but I will spend more time to learn it.)
 
 ## INSTALL
 Clone the repository and the 'data.npy' is located in **~/dataset/raw/** by default
