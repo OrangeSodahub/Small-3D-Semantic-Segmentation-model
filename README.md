@@ -1,4 +1,4 @@
-# Open3D_assignment
+# Small-3D-Semantic-Segmentation-model
 Implement a small 3D Semantic Segmentation model using Sparse Convolutions and overfit (train and eval on the same data) on the given dataset.
 
 
